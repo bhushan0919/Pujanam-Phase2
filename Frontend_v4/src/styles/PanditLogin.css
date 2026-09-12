@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+.pandit-page .auth-shell {
+  width: min(980px, 100%);
+  min-height: min(620px, calc(100vh - 20px));
+  grid-template-columns: 0.96fr 1.04fr;
+}
+
+.pandit-back-row {
+  @apply mb-3 flex justify-start;
+}
+
+.pandit-back-button {
+  @apply inline-flex items-center gap-2 rounded-full border border-[#9f1212] bg-transparent px-3.5 py-2 text-[0.8rem] font-semibold text-[#9f1212] transition hover:bg-[#fff3f3] hover:border-[#7f0e12] hover:text-[#7f0e12];
+}
+
+.pandit-hero-content {
+  @apply max-w-[360px];
+}
+
+.pandit-hero-kicker {
+  @apply text-[#d77c00];
+}
+
+.pandit-hero-emblem-wrap {
+  @apply max-w-[290px];
+}
+
+.pandit-hero-emblem {
+  @apply max-w-[260px];
+  filter: drop-shadow(0 18px 26px rgba(117, 62, 16, 0.18));
+}
+
+.pandit-hero-note span {
+  @apply text-[1rem];
+}
+
+.pandit-hero-note small {
+  @apply text-[0.78rem];
+}
+
+.pandit-form-card {
+  @apply max-w-[440px];
+}
+
+.pandit-login-form {
+  @apply mt-1;
+}
+
+.pandit-forgot-row {
+  @apply justify-end;
+}
+
+.pandit-support-note {
+  @apply mt-3 flex items-center justify-between gap-3 rounded-[12px] border border-[#efdcc4] bg-[#fffaf1] px-3.5 py-2 text-[0.8rem] font-medium text-[#6a4c31];
+}
+
+.pandit-forgot-page .auth-shell {
+  width: min(980px, 100%);
+  min-height: min(600px, calc(100vh - 20px));
+}
+
+.pandit-forgot-card {
+  @apply max-w-[440px];
+}
+
+.pandit-reset-success {
+  @apply space-y-3;
+}
+
+.pandit-reset-note {
+  @apply mt-3 text-[0.82rem] leading-6 text-[#6e5c49];
+}
+
+.pandit-reset-footer {
+  @apply mt-0;
+}
+
+.pandit-support-note a {
+  @apply font-semibold text-[#9f1212] underline underline-offset-2 transition hover:text-[#7f0e12];
+}
+
+.pandit-security-note {
+  @apply mt-3 flex items-center justify-center gap-2 text-[0.78rem] text-[#7b6651];
+}
+
+@media (max-width: 1100px) {
+  .pandit-page .auth-shell {
+    width: min(640px, 100%);
+    grid-template-columns: 1fr;
+  }
+
+  .pandit-forgot-page .auth-shell {
+    width: min(640px, 100%);
+  }
+
+  .pandit-form-card {
+    max-height: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .pandit-back-row {
+    @apply justify-center;
+  }
+
+  .pandit-support-note {
+    @apply flex-col items-start;
+  }
+}
