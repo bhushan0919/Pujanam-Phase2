@@ -1,0 +1,19 @@
+{
+  "name": "pujanam-playwright-automation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:smoke": "playwright test tests/smoke.spec.js",
+    "test:api": "playwright test tests/api.spec.js",
+    "test:auth": "playwright test tests/auth.spec.js",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "dotenv": "^16.6.1"
+  }
+}

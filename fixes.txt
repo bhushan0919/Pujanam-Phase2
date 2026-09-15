@@ -1,0 +1,4 @@
+booking error, cannot book the service, when it was working well before it was showing the next popup for advance payment, etc
+
+when click on the booking in mobile number it generates the dummy booking instead of the number which was entered during registration
+
