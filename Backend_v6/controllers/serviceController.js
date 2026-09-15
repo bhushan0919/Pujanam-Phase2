@@ -115,11 +115,23 @@ exports.deleteService = async (req, res) => {
 exports.getServiceById = async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
+
     if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
+      return res.status(404).json({
+        message: 'Service not found'
+      });
     }
+
     res.json(service);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error.name === 'CastError') {
+      return res.status(400).json({
+        message: 'Invalid service ID'
+      });
+    }
+
+    res.status(500).json({
+      message: error.message
+    });
   }
 };

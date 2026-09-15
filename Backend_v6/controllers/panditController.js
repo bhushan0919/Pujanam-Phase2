@@ -117,12 +117,24 @@ exports.getPanditLocations = async (req, res) => {
 exports.getPanditById = async (req, res) => {
   try {
     const pandit = await Pandit.findById(req.params.id);
+
     if (!pandit) {
-      return res.status(404).json({ message: 'Pandit not found' });
+      return res.status(404).json({
+        message: 'Pandit not found'
+      });
     }
+
     res.json(pandit);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error.name === 'CastError') {
+      return res.status(400).json({
+        message: 'Invalid pandit ID'
+      });
+    }
+
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
 

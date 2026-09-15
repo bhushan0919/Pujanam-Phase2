@@ -11,6 +11,7 @@ const Review = require('../models/Review');
 const Pandit = require('../models/Pandit');
 const emailService = require('../utils/emailService');
 const CancellationService = require('../services/cancellationService');
+const mongoose = require('mongoose');
 const crypto = require('crypto');
 
 // Customer registration
@@ -422,10 +423,38 @@ router.post('/review', authenticateCustomer, async (req, res) => {
 router.get('/pandit/:panditId/reviews', async (req, res) => {
   try {
     const { panditId } = req.params;
-    const reviews = await Review.find({ panditId }).populate('customerId', 'name').sort({ createdAt: -1 }).limit(20);
-    res.json({ success: true, reviews: reviews.map(r => ({ id: r._id, customerName: r.customerId?.name || 'Anonymous', rating: r.rating, review: r.review, date: r.createdAt })) });
+
+    // Validate MongoDB ObjectId before querying
+    if (!mongoose.Types.ObjectId.isValid(panditId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid pandit ID'
+      });
+    }
+
+    const reviews = await Review.find({ panditId })
+      .populate('customerId', 'name')
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    res.json({
+      success: true,
+      reviews: reviews.map(r => ({
+        id: r._id,
+        customerName: r.customerId?.name || 'Anonymous',
+        rating: r.rating,
+        review: r.review,
+        date: r.createdAt
+      }))
+    });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Get pandit reviews error:', error);
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 });
 

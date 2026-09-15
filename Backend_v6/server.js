@@ -248,7 +248,8 @@ app.get('/api/health', (req, res) => {
   res.json(health);
 });
 
-app.get('/api/health/detailed', (req, res) => {
+app.get('/api/health/detailed', async (req, res) => {
+  const startTime = Date.now();
 
   const health = {
     status: 'OK',
@@ -256,20 +257,38 @@ app.get('/api/health/detailed', (req, res) => {
     uptime: process.uptime(),
     memory: process.memoryUsage(),
     database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
-    responseTime: Date.now()
+    dbPing: 'not_checked',
+    responseTime: 0
   };
 
-  mongoose.connection.db.command({ ping: 1 }, (err) => {
-    health.dbPing = err ? 'failed' : 'success';
-    health.responseTime = Date.now() - health.responseTime;
+  try {
+    if (mongoose.connection.readyState !== 1 || !mongoose.connection.db) {
+      health.status = 'DEGRADED';
+      health.dbPing = 'failed';
+    } else {
+      await Promise.race([
+        mongoose.connection.db.command({ ping: 1 }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Database ping timeout')), 3000)
+        )
+      ]);
 
-    if (health.responseTime > 1000) {
-      console.log(`⚠️ Slow database ping: ${health.responseTime}ms`);
+      health.dbPing = 'success';
     }
+  } catch (error) {
+    health.status = 'DEGRADED';
+    health.dbPing = 'failed';
 
-    res.json(health);
-  });
+    console.error('⚠️ Detailed health DB check failed:', error.message);
+  }
 
+  health.responseTime = Date.now() - startTime;
+
+  if (health.responseTime > 1000) {
+    console.log(`⚠️ Slow detailed health check: ${health.responseTime}ms`);
+  }
+
+  res.json(health);
 });
 
 // ================= DEBUG ROUTES (DEVELOPMENT ONLY) =================
